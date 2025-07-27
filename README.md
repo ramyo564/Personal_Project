@@ -299,6 +299,108 @@ graph TD
 <br>
 <br>
 
+## ⚙️ **Backend: `Spring Boot` + `FastAPI` (MSA)**
+
+백엔드는 역할에 따라 두 개의 서버로 분리하여 구성했습니다.
+
+1. **핵심 비즈니스 로직: `Spring Boot`**
+
+    - 안정성과 생산성이 검증된 Spring Boot를 사용하여 핵심 비즈니스 로직(사용자, 할 일 관리 등)을 구현합니다.
+    - 특정 기능에 트래픽이 몰릴 경우 해당 도메인만 쉽게 분리할 수 있도록 **헥사고날 아키텍처(Hexagonal Architecture)와 DDD(도메인 주도 설계)** 를 적용하여 유연한 구조로 구성했습니다.
+3. **AI 연동 및 비동기 처리: `FastAPI`**
+    - **문제점**:
+      
+	    - 홈서버(미니PC) 환경에서 직접 AI 모델을 구동하기 어렵고, 외부 AI API(e.g., ChatGPT) 호출은 **심각한 I/O 병목**을 유발합니다. 
+	    - 동기 방식으로 동작하는 Spring Boot에서 이를 처리하는 것은 전체 시스템의 성능 저하를 초래합니다.
+    - **해결책**: 
+	    - I/O Bound 작업에 특화할 수 있는는 **FastAPI**를 별도의 서버로 분리하여 AI API 호출을 전담시킵니다. 
+	    - FastAPI의 비동기 처리 방식을 통해 Spring Boot의 블로킹을 방지하고 시스템 전체의 효율성을 확보합니다. 
+	    - 또한, 파이썬 기반의 FastAPI는 AI 관련 라이브러리와의 생태계 호환성 측면에서도 가장 합리적인 선택이라고 생각했습니다.
+
+## 1. 아키텍처 
+
+```mermaid
+  graph TD
+  %% Common Layer
+  subgraph "Common Layer"
+    COMMON_Config["Config (YAML, Java)"]
+    COMMON_Security["Security (JWT, OAuth2)"]
+    COMMON_Exception["Global Exception Handling"]
+    COMMON_Log["Logging & AOP"]
+  end
+
+  %% ============  User Context  ============
+  subgraph "User Bounded Context"
+    UI_User["Presentation / Interfaces
+    controller | dto | mapper"]
+    APP_User["Application Layer
+    service"]
+    DOMAIN_User["Domain Layer
+    model | repository (port) | event | vo"]
+    INFRA_User["Infrastructure Layer
+    persistence adapter | entity | mapper"]
+    UI_User --> APP_User
+    APP_User --> DOMAIN_User
+    DOMAIN_User --> INFRA_User
+  end
+
+  %% ============  Project Context  ============
+  subgraph "Project Bounded Context"
+    UI_Project["Presentation / Interfaces"]
+    APP_Project["Application Layer"]
+    DOMAIN_Project["Domain Layer"]
+    INFRA_Project["Infrastructure Layer"]
+    UI_Project --> APP_Project
+    APP_Project --> DOMAIN_Project
+    DOMAIN_Project --> INFRA_Project
+  end
+
+  %% ============  Auth Context  ============
+  subgraph "Auth Bounded Context"
+    UI_Auth["Presentation Layer"]
+    APP_Auth["Application Layer"]
+    DOMAIN_Auth["Domain Layer"]
+    INFRA_Auth["Infrastructure Layer"]
+    UI_Auth --> APP_Auth
+    APP_Auth --> DOMAIN_Auth
+    DOMAIN_Auth --> INFRA_Auth
+  end
+
+  %% Cross-cutting dependencies (dashed)
+  APP_User -.-> COMMON_Security
+  APP_Project -.-> COMMON_Security
+  APP_Auth -.-> COMMON_Security
+  UI_User -.-> COMMON_Exception
+  UI_Project -.-> COMMON_Exception
+  UI_Auth -.-> COMMON_Exception
+  INFRA_User -.-> COMMON_Log
+  INFRA_Project -.-> COMMON_Log
+  INFRA_Auth -.-> COMMON_Log                      
+```
+### 진행상황
+- [x] Spring 
+	- [x] DDD & 헥사고날 아키텍처 설계 -> 도메인별로 분리
+	- [x] Swagger API 문서 자동화
+	- [x] 최소기능 MVP 구현
+		- [x] Auth
+			- [x] OAuth2 - Google 연동
+			- [ ] 기본적인 구성 끝나면 카카오, 네이버 연동하기
+			- [x] JWT 설정
+			- [x] Session 비활성화
+			- [x] Redis 설정하기
+		- [x] Project
+		- [x] User
+	- [x] UUIDv7 변경하기
+- [ ] FastAPI 서버 구축
+- [ ] Spring 성능 최적화 1차진행
+	- [ ] DB 튜닝 
+	- [ ] Redis 캐싱
+- [ ] rabbitMQ -> 알림 및 타이머등 고도화 진행
+
+<br>
+<br>
+
+
 
 ## 🔧 **DevOps - Infrastructure**
 
