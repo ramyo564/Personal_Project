@@ -283,106 +283,14 @@ graph TD
 	- [x] 빌드환경 리팩토링 npm -> pnpm & turborepo 적용
 	- [x] 개발환경 표준화 docker -> mise 적용
 	- [x] CSS -> tailwindcss 적용
+ 		- [ ] 웹 -> 반응형 CSS 세밀 조정 	
 	- [x] 코드품질 개선 -> madge, ESlint, husky 적용
 	- [x] 최소기능 MVP 구현
 	- [x] OAuth2 구글 로그인 연동 및 백엔드 연결
 	- [x] 사용자 보안 강화 -> JWT + HttpOnly 쿠기 
 	- [x] react-router-dom v6 -> v7 리팩토링
 	- [x] Core 및 전역 상태관리 -> Redux 적용
-- [ ] RN
-- [ ] Electron
-
-<br>
-<br>
-
-
-## ⚙️ **Backend: `Spring Boot` + `FastAPI` (MSA)**
-
-백엔드는 역할에 따라 두 개의 서버로 분리하여 구성했습니다.
-
-1. **핵심 비즈니스 로직: `Spring Boot`**
-
-    - 안정성과 생산성이 검증된 Spring Boot를 사용하여 핵심 비즈니스 로직(사용자, 할 일 관리 등)을 구현합니다.
-    - 특정 기능에 트래픽이 몰릴 경우 해당 도메인만 쉽게 분리할 수 있도록 **헥사고날 아키텍처(Hexagonal Architecture)와 DDD(도메인 주도 설계)** 를 적용하여 유연한 구조로 구성했습니다.
-3. **AI 연동 및 비동기 처리: `FastAPI`**
-    - **문제점**:
-      
-	    - 홈서버(미니PC) 환경에서 직접 AI 모델을 구동하기 어렵고, 외부 AI API(e.g., ChatGPT) 호출은 **심각한 I/O 병목**을 유발합니다. 
-	    - 동기 방식으로 동작하는 Spring Boot에서 이를 처리하는 것은 전체 시스템의 성능 저하를 초래합니다.
-    - **해결책**: 
-	    - I/O Bound 작업에 특화할 수 있는는 **FastAPI**를 별도의 서버로 분리하여 AI API 호출을 전담시킵니다. 
-	    - FastAPI의 비동기 처리 방식을 통해 Spring Boot의 블로킹을 방지하고 시스템 전체의 효율성을 확보합니다. 
-	    - 또한, 파이썬 기반의 FastAPI는 AI 관련 라이브러리와의 생태계 호환성 측면에서도 가장 합리적인 선택이라고 생각했습니다.
-
-## 1. 아키텍처 
-
-```mermaid
-  graph TD
-  %% Common Layer
-  subgraph "Common Layer"
-    COMMON_Config["Config (YAML, Java)"]
-    COMMON_Security["Security (JWT, OAuth2)"]
-    COMMON_Exception["Global Exception Handling"]
-    COMMON_Log["Logging & AOP"]
-  end
-
-  %% ============  User Context  ============
-  subgraph "User Bounded Context"
-    UI_User["Presentation / Interfaces
-    controller | dto | mapper"]
-    APP_User["Application Layer
-    service"]
-    DOMAIN_User["Domain Layer
-    model | repository (port) | event | vo"]
-    INFRA_User["Infrastructure Layer
-    persistence adapter | entity | mapper"]
-    UI_User --> APP_User
-    APP_User --> DOMAIN_User
-    DOMAIN_User --> INFRA_User
-  end
-
-  %% ============  Project Context  ============
-  subgraph "Project Bounded Context"
-    UI_Project["Presentation / Interfaces"]
-    APP_Project["Application Layer"]
-    DOMAIN_Project["Domain Layer"]
-    INFRA_Project["Infrastructure Layer"]
-    UI_Project --> APP_Project
-    APP_Project --> DOMAIN_Project
-    DOMAIN_Project --> INFRA_Project
-  end
-
-  %% ============  Auth Context  ============
-  subgraph "Auth Bounded Context"
-    UI_Auth["Presentation Layer"]
-    APP_Auth["Application Layer"]
-    DOMAIN_Auth["Domain Layer"]
-    INFRA_Auth["Infrastructure Layer"]
-    UI_Auth --> APP_Auth
-    APP_Auth --> DOMAIN_Auth
-    DOMAIN_Auth --> INFRA_Auth
-  end
-
-  %% Cross-cutting dependencies (dashed)
-  APP_User -.-> COMMON_Security
-  APP_Project -.-> COMMON_Security
-  APP_Auth -.-> COMMON_Security
-  UI_User -.-> COMMON_Exception
-  UI_Project -.-> COMMON_Exception
-  UI_Auth -.-> COMMON_Exception
-  INFRA_User -.-> COMMON_Log
-  INFRA_Project -.-> COMMON_Log
-  INFRA_Auth -.-> COMMON_Log                      
-```
-### 진행상황
-- [x] Spring 
-	- [x] 아키텍처 구조 설계
-	- [x] 최소기능 MVP 구현
-	- [x] Swagger API 문서 자동화
-	- [x] OAuth2 구글 로그인 연동
-	- [x] 사용자 보안 강화 -> JWT + HttpOnly 쿠기 
-	- [x] UUIDv7 적용
-- [ ] FastAPI 서버 구축하기
+- [ ] FastAPI 서버 구축
 - [ ] Spring 성능 최적화 1차진행
 	- [ ] DB 튜닝 
 	- [ ] Redis 캐싱
@@ -394,12 +302,115 @@ graph TD
 
 ## 🔧 **DevOps - Infrastructure**
 
-- **홈서버(미니PC)**:
+**홈서버(미니PC)**:
   
-  개인용 미니PC를 홈서버로 운영하여 비용 절감과 인프라 구축 경험을 동시에 확보하는 것을 목표로 했습니다. 
-  이는 의도적으로 제약 조건을 설정하여 다음과 같은 학습 효과를 극대화하기 좋은 조건이라고 생각했습니다.
-    - 성능 최적화: 제한된 리소스로 인해 코드 레벨에서 병목 현상을 분석하고 해결하는 능력에 집중할 수 있도록 하는 것을 목표로 했습니다.
-    - 강화된 보안 의식: 모든 보안 책임을 직접 지는 환경을 통해 실수를 줄이고 경각심을 높아는 것을 목표로 했습니다.
+개인용 미니PC를 홈서버로 운영하여 비용 절감과 인프라 구축 경험을 동시에 확보하는 것을 목표로 했습니다. 
+이는 의도적으로 제약 조건을 설정하여 다음과 같은 학습 효과를 극대화하기 좋은 조건이라고 생각했습니다.
+- 성능 최적화: 제한된 리소스로 인해 코드 레벨에서 병목 현상을 분석하고 해결하는 능력에 집중할 수 있도록 하는 것을 목표로 했습니다.
+- 강화된 보안 의식: 모든 보안 책임을 직접 지는 환경을 통해 실수를 줄이고 경각심을 높아는 것을 목표로 했습니다.
+
+
+### 프론트엔드 DevOps 설계
+
+프론트는 **모노레포(Monorepo)** 아키텍처로 모바일, PC, 웹 등 다양한 플랫폼을 효율적으로 지원하고자 했습니다.   
+이런 구조에서 코드품질 및 개발환경, 파이프라인을 구축하기 위해
+ESLint, Husky, Mise등을 이용했습니다.
+
+
+### 프론트엔드 모노레포 내부구조 + 도구 계층
+
+
+```mermaid
+graph TD
+  subgraph "Local Dev"
+    VSCode["VSCode / Vite Dev Server"]
+    VSCode --> PNPMDev["pnpm run dev"]
+    PNPMDev --> Vite["Vite (HMR)"]
+  end
+
+  subgraph "Monorepo Structure"
+    Core["packages/core (UI · Store · API)"]
+    WebApp["packages/apps/web"]
+    MobileApp["packages/apps/mobile"]
+    DesktopApp["packages/apps/desktop"]
+    Core --> WebApp
+    Core --> MobileApp
+    Core --> DesktopApp
+  end
+
+  subgraph "Build Cache"
+    Turbo["Turbo (build · lint · test · typecheck)"]
+  end
+
+  subgraph "GitHub"
+    PR["Push / Pull Request"]
+  end
+
+  subgraph "CI — GitHub Actions (ci.yml)"
+    Checkout["actions/checkout@v4"]
+    SetupNode["actions/setup-node@v3 (Node 20)"]
+    SetupPNPM["pnpm/action-setup@v3"]
+    Install["pnpm install --frozen-lockfile"]
+    Lint["pnpm run lint"]
+    Test["pnpm run test"]
+    Build["pnpm run build"]
+    Clean["pnpm run clean"]
+    Checkout --> SetupNode --> SetupPNPM --> Install --> Lint --> Test --> Build --> Clean
+    Build --> Turbo
+  end
+
+  Developer["Developer"] --> PR
+  PR --> Checkout
+
+  Turbo --> WebApp
+  Turbo --> MobileApp
+  Turbo --> DesktopApp
+
+  WebApp --> Vite
+
+  Build --> Artefacts["dist/** artefacts"]
+  Artefacts --> Deploy["(수동) Deploy Pipeline"]
+```
+
+### DevOps 파이프라인 (프론트)
+
+```mermaid
+graph TD
+    subgraph "Local Development"
+        Developer["Developer"] --> VSCode["VSCode / Vite"]
+        VSCode --> LocalRun["pnpm run dev (via Turbo)"]
+    end
+
+    subgraph "Code & Version Control"
+        Repo["Monorepo (packages, apps)"]
+        Developer --> |git push| GitHub["GitHub (Pull Request)"]
+    end
+
+    subgraph "CI Pipeline (GitHub Actions)"
+        trigger(Trigger: on PR) --> Checkout
+        
+        Checkout["actions/checkout@v4"] --> Setup["Setup (Node, pnpm)"]
+        Setup --> Install["pnpm install"]
+        
+        Install --> CI_Steps
+        subgraph "CI Steps (Orchestrated by Turborepo)"
+            CI_Lint["pnpm turbo lint"]
+            CI_Test["pnpm turbo test"]
+            CI_Build["pnpm turbo build"]
+        end
+        
+        CI_Build --> Artifacts["Build Artifacts (dist)"]
+    end
+
+    subgraph "CD Pipeline"
+        Artifacts --> Deploy["Manual Deploy to Hosting"]
+    end
+    
+    GitHub --> trigger
+    Repo -- "Is the target of" --> CI_Steps
+```
+
+
 
 ### 진행상황
 - [x] 우분투 서버 OS 설치 
