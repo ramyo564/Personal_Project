@@ -418,14 +418,14 @@ graph TD
 - 강화된 보안 의식: 모든 보안 책임을 직접 지는 환경을 통해 실수를 줄이고 경각심을 높아는 것을 목표로 했습니다.
 
 
-### 프론트엔드 DevOps 설계
+### FE DevOps 설계
 
 프론트는 **모노레포(Monorepo)** 아키텍처로 모바일, PC, 웹 등 다양한 플랫폼을 효율적으로 지원하고자 했습니다.   
 이런 구조에서 코드품질 및 개발환경, 파이프라인을 구축하기 위해
 ESLint, Husky, Mise등을 이용했습니다.
 
 
-### 프론트엔드 모노레포 내부구조 + 도구 계층
+### FE 모노레포 내부구조 + 도구 계층
 
 
 ```mermaid
@@ -480,7 +480,7 @@ graph TD
   Artefacts --> Deploy["(수동) Deploy Pipeline"]
 ```
 
-### DevOps 파이프라인 (프론트)
+### DevOps 파이프라인 (FE)
 
 ```mermaid
 graph TD
