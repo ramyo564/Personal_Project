@@ -7,12 +7,12 @@
 
 ## 📂 목차
 
-[1. 왜 하필 Todo List 인가?](https://github.com/ramyo564/Personal_Project#-%EC%99%9C-ai-%EA%B8%B0%EB%B0%98%EC%9D%98-todo-list-%EC%9D%B8%EA%B0%80)
-[2. 아키텍처 및 기술 스텍](https://github.com/ramyo564/Personal_Project#-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98-%EB%B0%8F-%EA%B8%B0%EC%88%A0-%EC%8A%A4%ED%83%9D)
-[3. 주요목표](https://github.com/ramyo564/Personal_Project#-%EC%A3%BC%EC%9A%94-%EB%AA%A9%ED%91%9C)(
-[3. FE - 아키텍처](https://github.com/ramyo564/Personal_Project#%EF%B8%8F-frontend-react--typescript--reactnative--electron--monorepo)
-[4. BE - 아키텍처](https://github.com/ramyo564/Personal_Project#%EF%B8%8F-backend-spring-boot--fastapi-msa)
-[5. DevOps - 아키텍처](https://github.com/ramyo564/Personal_Project#-devops---infrastructure)
+[1. 왜 하필 Todo List 인가?](https://github.com/ramyo564/Personal_Project#-%EC%99%9C-ai-%EA%B8%B0%EB%B0%98%EC%9D%98-todo-list-%EC%9D%B8%EA%B0%80)   
+[2. 아키텍처 및 기술 스텍](https://github.com/ramyo564/Personal_Project#-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98-%EB%B0%8F-%EA%B8%B0%EC%88%A0-%EC%8A%A4%ED%83%9D)   
+[3. 주요목표](https://github.com/ramyo564/Personal_Project#-%EC%A3%BC%EC%9A%94-%EB%AA%A9%ED%91%9C)   
+[3. FE - 아키텍처](https://github.com/ramyo564/Personal_Project#%EF%B8%8F-frontend-react--typescript--reactnative--electron--monorepo)   
+[4. BE - 아키텍처](https://github.com/ramyo564/Personal_Project#%EF%B8%8F-backend-spring-boot--fastapi-msa)   
+[5. DevOps - 아키텍처](https://github.com/ramyo564/Personal_Project#-devops---infrastructure)   
 
 ## 🤔 왜 AI 기반의 Todo List 인가?
 
