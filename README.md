@@ -7,6 +7,12 @@
 
 ## 📂 목차
 
+[1. 왜 하필 Todo List 인가?](https://github.com/ramyo564/Personal_Project#-%EC%99%9C-ai-%EA%B8%B0%EB%B0%98%EC%9D%98-todo-list-%EC%9D%B8%EA%B0%80)
+[2. 아키텍처 및 기술 스텍](https://github.com/ramyo564/Personal_Project#-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98-%EB%B0%8F-%EA%B8%B0%EC%88%A0-%EC%8A%A4%ED%83%9D)
+[3. 주요목표](https://github.com/ramyo564/Personal_Project#-%EC%A3%BC%EC%9A%94-%EB%AA%A9%ED%91%9C)(
+[3. FE - 아키텍처](https://github.com/ramyo564/Personal_Project#%EF%B8%8F-frontend-react--typescript--reactnative--electron--monorepo)
+[4. BE - 아키텍처](https://github.com/ramyo564/Personal_Project#%EF%B8%8F-backend-spring-boot--fastapi-msa)
+[5. DevOps - 아키텍처](https://github.com/ramyo564/Personal_Project#-devops---infrastructure)
 
 ## 🤔 왜 AI 기반의 Todo List 인가?
 
@@ -24,14 +30,14 @@
 
 <br>
 
-## 📜 아키텍처 및 기술 스택
+## 📜 아키텍처 및 기술 스텍
 
 이 프로젝트는 제한된 리소스 환경 - 미니PC (홈서버) - 에서 운영하기 때문에, 각 기술 스택의 장점을 활용하여 효율성, 비용 최소화, 미니PC의 성능을 극대화 할 수 있는 방향으로 설계하고 있습니다.
 
 해당 README는 아키텍처나 문제점을 해결할 때마다 변경사항을 지속적으로 업데이트할 예정입니다!   
 보안적인 부분 때문에 코드는 비공개로 하는 점 양해부탁드립니다.   
 
-좀 더 자세한 내용은 [블로그](https://ramyo564.github.io/git_blog/project_ai_todo/ai_todo_1_masterTable/) 에 기록해두었습니다.  
+좀 더 자세한 고민과정 및 진행 내용은 [블로그](https://ramyo564.github.io/git_blog/project_ai_todo/ai_todo_1_masterTable/) 에 기록해두었습니다.  
 
 <br>
 
